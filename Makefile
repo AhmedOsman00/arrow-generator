@@ -2,7 +2,8 @@
 BUILD_DIR := .build
 OUTPUT_DIR := bin
 OUTPUT := $(OUTPUT_DIR)/arrow
-SWIFT_BUILD_FLAGS := -c release --arch x86_64 --arch arm64
+SWIFT_VERSION := $(shell cat .swift-version 2>/dev/null || echo "6.0")
+SWIFT_BUILD_FLAGS := -c release --arch x86_64 --arch arm64 -Xswiftc -swift-version -Xswiftc $(SWIFT_VERSION)
 
 .PHONY: all build test lint install-hooks clean bootstrap help docs generate-version
 
@@ -80,11 +81,11 @@ bootstrap:
 
 # Generate version from git tags
 generate-version:
-	@echo "🔢 Generating version from git tags..."
-	@./scripts/generate-version.sh
+	@echo "🔢 Generating version $(VERSION)"
+	@./scripts/generate-version.sh $(VERSION)
 
 # Build the Swift script (universal binary)
-build: generate-version
+build: 
 	@echo "🔨 Building universal binary (x86_64 + arm64)..."
 	@swift build $(SWIFT_BUILD_FLAGS)
 	@mkdir -p $(OUTPUT_DIR)

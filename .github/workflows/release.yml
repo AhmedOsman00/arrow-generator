@@ -17,7 +17,7 @@ jobs:
       - name: Generate Version File
         run: |
           VERSION="${{ github.ref_name }}"
-          ./scripts/generate-version.sh "$VERSION"
+          make generate-version VERSION="$VERSION"
 
       - name: Setup Swift
         uses: ./.github/actions/setup-swift

@@ -23,6 +23,7 @@ let package = Package(
     .package(url: "https://github.com/swiftlang/swift-syntax.git", exact: "602.0.0"),
     .package(url: "https://github.com/kylef/PathKit.git", exact: "1.0.1"),
     .package(url: "https://github.com/tuist/XcodeProj.git", exact: "9.7.1"),
+    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.4.5"),
   ],
   targets: [
     .executableTarget(
@@ -42,5 +43,6 @@ let package = Package(
     .testTarget(
       name: "ArrowGeneratorCoreTests",
       dependencies: ["ArrowGeneratorCore"]),
-  ]
+  ],
+  swiftLanguageModes: [.v6]
 )
