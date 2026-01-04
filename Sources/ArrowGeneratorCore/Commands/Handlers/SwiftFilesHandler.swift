@@ -53,12 +53,13 @@ final class SwiftFilesHandler: SwiftFilesHandlerProtocol {
     func parseSwiftFiles(_ swiftFiles: Set<String>) throws -> [DependencyModule] {
         logger.log("📝 Starting to parse \(swiftFiles.count) Swift files")
 
-        let modules = try swiftFiles.flatMap { filePath -> Set<DependencyModule> in
-            logger.log("Parsing file: \(filePath)")
+        return try swiftFiles.flatMap {
+            logger.log("Parsing file: \($0)")
 
-            let path = URL(fileURLWithPath: filePath)
+            let path = URL(fileURLWithPath: $0)
             let content = try String(contentsOf: path)
-            let tree = parser.parse(source: content)
+            let tree = Parser.parse(source: content)
+            let syntaxVisitor = DependencyModulesParser(viewMode: .all)
             let fileModules = syntaxVisitor.parse(tree)
 
             logger.log("  Found \(fileModules.count) modules in \(path.lastPathComponent)")
@@ -66,8 +67,6 @@ final class SwiftFilesHandler: SwiftFilesHandlerProtocol {
 
             return fileModules
         }
-
-        return modules
     }
 
     func generateDependenciesFile(modules: [DependencyModule]) throws -> String {
@@ -80,10 +79,10 @@ final class SwiftFilesHandler: SwiftFilesHandlerProtocol {
         logger.log("Build order:")
         buildMap.enumerated().forEach { logger.log("  \($1)-> \($0 + 1)") }
 
-        logger.log("Creating dependency file presentation...")
         let presenter = DependencyFilePresenter(data: modules, dependenciesOrder: buildMap)
         var file = ""
         DependencyFile(presenter: presenter).file.write(to: &file)
+        logger.log("✅ Dependency extension updated")
 
         return file
     }

@@ -56,16 +56,9 @@ public struct DependencyRegistrationGenerator: ParsableCommand {
     var isPackage: Bool = false
 
     @Option(
-        name: .customLong(Constants.targetNameArgument),
-        help:
-            "The Xcode target name to scan for dependency modules (falls back to TARGET_NAME environment variable)"
-    )
-    var targetName: String?
-
-    @Option(
-        name: .customLong(Constants.xcodeProjPathArgument),
-        help: "Path to the .xcodeproj file (falls back to PROJECT_FILE_PATH environment variable)")
-    var xcodeProjPath: String?
+        name: .customLong(Constants.extensionPathArgument),
+        help: "Path to the dependencies.generated.swift file (falls back to PROJECT_DIR environment variable)")
+    var depsExtPath: String?
 
     @Option(
         name: .customLong(Constants.projRootArgument),
@@ -91,18 +84,9 @@ public struct DependencyRegistrationGenerator: ParsableCommand {
 
             let packageHandler = PackageHandler(
                 swiftHandler: swiftHandler,
-                generatedFileName: Constants.generatedFileName)
+                generatedFileName: Constants.generatedFileName,
+                logger: logger)
             return try packageHandler.addDependenciesFileToSwiftPackage(packageSourcesPath: packageSourcesPath)
-        }
-
-        guard let targetName = targetName ?? ProcessInfo.processInfo.environment["TARGET_NAME"] else {
-            throw ValidationError.missingArgument(Constants.targetNameArgument)
-        }
-
-        guard
-            let projFilePath = xcodeProjPath ?? ProcessInfo.processInfo.environment["PROJECT_FILE_PATH"]
-        else {
-            throw ValidationError.missingArgument(Constants.xcodeProjPathArgument)
         }
 
         guard
@@ -111,18 +95,15 @@ public struct DependencyRegistrationGenerator: ParsableCommand {
             throw ValidationError.missingArgument(Constants.projRootArgument)
         }
 
-        let xcodeProjPath = Path(projFilePath)
-        let xcodeProjFile = try XcodeProjFile(
-            project: XcodeProj(path: xcodeProjPath),
-            xcodeProjPath: xcodeProjPath,
-            target: targetName)
+        let depsExtPath = depsExtPath ?? "\(projRoot)/\(Constants.generatedFileName)"
         let xcodehandler = XcodeProjHandler(
             swiftHandler: swiftHandler,
-            xcodeProj: xcodeProjFile,
-            generatedFileName: Constants.generatedFileName)
+            generatedFileName: Constants.generatedFileName,
+            logger: logger)
         try xcodehandler.addDependenciesFileToXcodeProject(
             projRoot: projRoot,
             packageSourcesPaths: packageSourcesPaths,
+            depsExtPath: depsExtPath,
             )
     }
 
