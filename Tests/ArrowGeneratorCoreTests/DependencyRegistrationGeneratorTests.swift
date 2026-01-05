@@ -14,28 +14,15 @@ class DependencyRegistrationGeneratorTests: XCTestCase {
     }
   }
 
-  func testXcodeMode_WhenTargetNameMissing_ThrowsValidationError() {
+  func testXcodeMode_WhenProjRootMissing_ThrowsValidationError() {
     var generator = DependencyRegistrationGenerator()
     generator.verbose = false
     generator.isPackage = false
-    generator.targetName = nil
+    generator.projRoot = nil
 
     XCTAssertThrowsError(try generator.run()) { error in
       XCTAssertTrue(error is DependencyRegistrationGenerator.ValidationError)
-      XCTAssertEqual(error.localizedDescription, "Argument: --target-name is required.")
-    }
-  }
-
-  func testXcodeMode_WhenDepsExtPathMissing_ThrowsValidationError() {
-    var generator = DependencyRegistrationGenerator()
-    generator.verbose = false
-    generator.isPackage = false
-    generator.targetName = "Main"
-    generator.depsExtPath = nil
-
-    XCTAssertThrowsError(try generator.run()) { error in
-      XCTAssertTrue(error is DependencyRegistrationGenerator.ValidationError)
-      XCTAssertEqual(error.localizedDescription, "Argument: --ext-path is required.")
+      XCTAssertEqual(error.localizedDescription, "Argument: --proj-root is required.")
     }
   }
 }
