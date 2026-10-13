@@ -10,7 +10,7 @@ class DependencyRegistrationGeneratorTests: XCTestCase {
     generator.packageSourcesPaths = []
     XCTAssertThrowsError(try generator.run()) { error in
       XCTAssertTrue(error is DependencyRegistrationGenerator.ValidationError)
-      XCTAssertEqual(error.localizedDescription, "Argument: --package-path is required.")
+      XCTAssertEqual(error.localizedDescription, "Argument: --package-sources-path is required.")
     }
   }
 
