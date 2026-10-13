@@ -87,8 +87,8 @@ Scans the Swift files under the project root, plus any package sources you pass,
 ```bash
 arrow generate \
   --proj-root /path/to/YourApp \
-  --package-sources-path /path/to/LocalPackage/Sources/LocalPackage \
-  --package-sources-path /path/to/OtherPackage/Sources/OtherPackage
+  --package-path /path/to/LocalPackage/Sources/LocalPackage \
+  --package-path /path/to/OtherPackage/Sources/OtherPackage
 ```
 
 By default the file is written to `<proj-root>/dependencies.generated.swift`. Use `--ext-path` to point somewhere else.
@@ -115,7 +115,7 @@ Use this mode for standalone Swift Packages. The file is written into the first 
 ```bash
 arrow generate \
   --is-package \
-  --package-sources-path Sources/YourPackage
+  --package-path Sources/YourPackage
 ```
 
 To regenerate easily, add the command to a `Makefile` target or a script in your package.
@@ -261,7 +261,7 @@ OPTIONS:
   --proj-root <path>             Root path of the project (falls back to PROJECT_DIR)
   --ext-path <path>              Path to an existing dependencies.generated.swift
                                  (defaults to <proj-root>/dependencies.generated.swift)
-  --package-sources-path <path>  Path to a Swift Package sources directory
+  --package-path <path>          Path to a Swift Package sources directory
                                  (can be specified multiple times)
   --version                      Show the version
   --help                         Show help information

@@ -11,7 +11,7 @@ import SwiftSyntax
 /// two modes of operation:
 ///
 /// **Xcode Project Mode** (default):
-/// - Scans the project root (and any `--package-sources-path`) for Swift sources
+/// - Scans the project root (and any `--package-path`) for Swift sources
 /// - Generates registration code
 /// - Overwrites an existing `dependencies.generated.swift` (the project file is never modified)
 ///
@@ -32,7 +32,7 @@ import SwiftSyntax
 /// arrow generate --proj-root /path/to/App
 ///
 /// # Swift package
-/// arrow generate --is-package --package-sources-path Sources/MyPackage
+/// arrow generate --is-package --package-path Sources/MyPackage
 /// ```
 public struct DependencyRegistrationGenerator: ParsableCommand {
   public static let configuration = CommandConfiguration(

@@ -59,12 +59,12 @@ The tool supports two operational modes:
 #### Xcode Project Mode
 - Uses `XcodeFileParser` to extract Swift files from `.xcodeproj`
 - Overwrites an existing `dependencies.generated.swift` (it never edits the `.xcodeproj`)
-- Supports additional package sources via `--package-sources-path`
+- Supports additional package sources via `--package-path`
 
 #### Swift Package Mode
 - Directly scans a sources directory
 - Does not modify any project files
-- Invoked directly with `arrow generate --is-package --package-sources-path <path>`
+- Invoked directly with `arrow generate --is-package --package-path <path>`
 
 ## Core Components
 
